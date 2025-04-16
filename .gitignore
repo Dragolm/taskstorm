@@ -56,3 +56,4 @@ android/app/src/
 android/gradle/
 /.metadata
 /analysis_options.yaml
+/.env
