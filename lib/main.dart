@@ -1,16 +1,16 @@
 import 'dart:developer';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/constants.dart';
 
-Future<void> main() async {
-  await Supabase.initialize(
-    url: 'https://xyzcompany.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFncHFwZ2h3cGFjbW9nc3hvb2pzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2Mzg0MjMsImV4cCI6MjA2MDIxNDQyM30.Wbj3s0ZugD2-zv3Ws61fhj9KpaoqVgZ9ogZk7hg8rIc',
-  );
 
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+  await Supabase.initialize(
+    url: 'https://agpqpghwpacmogsxoojs.supabase.co',
+    anonKey: dotenv.env['anon_key'].toString(),
+  );
   runApp(MyApp());
 }
 
