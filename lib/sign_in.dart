@@ -15,6 +15,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
+  final User? user = supabase.auth.currentUser;
 
   @override
   void initState() {

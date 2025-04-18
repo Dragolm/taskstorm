@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/constants.dart';
+import 'package:taskstorm/home_page.dart';
 import 'package:taskstorm/sign_in.dart';
 import 'package:taskstorm/sign_up.dart';
 //import 'package:taskstorm/constants.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TaskStorm',
-      home: SignIn(),
+      home: AuthGate(),
       routes: {
         signUpRoute: (context) => SignUp(),
         signInRoute: (context) => SignIn(),
@@ -37,16 +38,27 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
 
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return StreamBuilder(stream: Supabase.instance.client.auth.onAuthStateChange,
+     builder: (context, snapshot) {
+      if(snapshot.connectionState == ConnectionState.waiting){
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      //after snapshot is gotten to check is a valid session exists
+      final session = snapshot.hasData ? snapshot.data!.session : false;
+      if (session!=null) {
+        return HomePage();
+      } else {
+        return SignIn();
+      }
+     } 
+    ,);
   }
 }
