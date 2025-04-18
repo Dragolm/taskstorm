@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/constants.dart';
 import 'package:taskstorm/main.dart';
-//import 'package:taskstorm/sign_in.dart';
+import 'package:taskstorm/auth_services.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -81,13 +81,7 @@ class _SignInState extends State<SignIn> {
                   onPressed: () async {
                     log(_email.text);
                     log(_name.text);
-                    final AuthResponse res = await supabase.auth
-                        .signInWithPassword(
-                          email: _email.text.toLowerCase(),
-                          password: _name.text.toLowerCase(),
-                        );
-                    final Session? session = res.session;
-                    final User? user = res.user;
+                    final user = await AuthServices().signInService(email: _email.text, password: _name.text.toLowerCase());
                     log(user?.id.toString() ?? "error");
                     if (context.mounted) {
                       Navigator.pushNamedAndRemoveUntil(

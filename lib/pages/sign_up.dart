@@ -1,10 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-//import 'package:taskstorm/signUp.dart';
+import 'package:taskstorm/auth_services.dart';
 import 'package:taskstorm/constants.dart';
-import 'package:taskstorm/main.dart';
-import 'package:taskstorm/sign_in.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -81,12 +78,7 @@ class _SignUpState extends State<SignUp> {
                   onPressed: () async {
                     log(_name.text);
                     log(_email.text);
-                    final AuthResponse res = await supabase.auth.signUp(
-                      email: _email.text.toLowerCase(),
-                      password: _name.text.toLowerCase(),
-                    );
-                    final Session? session =  res.session;
-                    final User? user = res.user;
+                    AuthServices().signUpService(email: _email.text, password: _name.text.toLowerCase());
                   },
                   child: const Text('Sign Up'),
                 ),
