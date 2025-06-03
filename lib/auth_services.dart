@@ -1,17 +1,28 @@
 //import 'package:flutter/material.dart';
+// import 'dart:developer';
+// import 'dart:io';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/main.dart';
 
 class AuthServices {
-  
   //signin
-  Future<User?> signInService({required String email, required String password}) async {
-    final res = await supabase.auth.signInWithPassword(email: email, password: password);
+  Future<User?> signInService({
+    required String email,
+    required String password,
+  }) async {
+    final res = await supabase.auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
     return res.user;
   }
 
   //signup
-  Future<User?> signUpService({required String email, required String password}) async {
+  Future<User?> signUpService({
+    required String email,
+    required String password,
+  }) async {
     final res = await supabase.auth.signUp(email: email, password: password);
     return res.user;
   }
@@ -21,6 +32,6 @@ class AuthServices {
     await supabase.auth.signOut();
   }
 
-  //get email can implement later if needed 
+  //get email can implement later if needed
 
 }

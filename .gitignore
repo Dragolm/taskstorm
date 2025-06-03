@@ -57,3 +57,4 @@ android/gradle/
 /.metadata
 /analysis_options.yaml
 /.env
+/TODO.md

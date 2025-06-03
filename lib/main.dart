@@ -3,9 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/constants.dart';
-import 'package:taskstorm/home_page.dart';
-import 'package:taskstorm/sign_in.dart';
-import 'package:taskstorm/sign_up.dart';
+import 'package:taskstorm/pages/home_page.dart';
+import 'package:taskstorm/pages/sign_in.dart';
+import 'package:taskstorm/pages/sign_up.dart';
 //import 'package:taskstorm/constants.dart';
 
 Future<void> main() async {
@@ -52,7 +52,7 @@ class AuthGate extends StatelessWidget {
         );
       }
       //after snapshot is gotten to check is a valid session exists
-      final session = snapshot.hasData ? snapshot.data!.session : false;
+      final session = snapshot.hasData ? snapshot.data!.session : null;
       if (session!=null) {
         return HomePage();
       } else {

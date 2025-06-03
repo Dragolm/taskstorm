@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+//import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/constants.dart';
-import 'package:taskstorm/main.dart';
+//import 'package:taskstorm/main.dart';
 import 'package:taskstorm/auth_services.dart';
 
 class SignIn extends StatefulWidget {
@@ -15,7 +15,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
-  final User? user = supabase.auth.currentUser;
+  // final AuthServices auther = AuthServices();
 
   @override
   void initState() {
