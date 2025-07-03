@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:taskstorm/auth_services.dart';
 //import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/constants.dart';
 //import 'package:taskstorm/main.dart';
@@ -44,7 +46,11 @@ class _SignInState extends State<SignIn> {
           children: [
             Column(
               children: [
-                Container(color: backgroundBlack, height: 65, width: deviceWidth),
+                Container(
+                  color: backgroundBlack,
+                  height: 65,
+                  width: deviceWidth,
+                ),
                 Container(
                   color: backgroundBlack,
                   height: deviceHeight / 2.5,
@@ -64,74 +70,140 @@ class _SignInState extends State<SignIn> {
               ],
             ),
             Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: deviceHeight / 4.5),
-              Center(
-                child: Text(
-                  'Sign In',
-                  style: TextStyle(
-                    fontSize: 50.0,
-                    color: blueText,
-                    fontWeight: FontWeight.bold,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: deviceHeight / 4.5),
+                Center(
+                  child: Text(
+                    'Sign In',
+                    style: TextStyle(
+                      fontSize: 50.0,
+                      color: blueText,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: deviceHeight/8),
-              textWithField(text: 'Email:', keyType: TextInputType.emailAddress, controller: _email),
-              textWithField(text: 'Password:', keyType: TextInputType.visiblePassword, controller: _password)
-            ],
-          ),
+                SizedBox(height: deviceHeight / 8),
+                textWithField(
+                  text: 'Email:',
+                  keyType: TextInputType.emailAddress,
+                  controller: _email,
+                ),
+                textWithField(
+                  text: 'Password:',
+                  keyType: TextInputType.visiblePassword,
+                  controller: _password,
+                ),
+                SizedBox(height: 28),
+                SizedBox(
+                  width: deviceWidth/1.55,
+                  height: 55,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      log(_email.text);
+                      log(_password.text);
+                      final user = await AuthServices().signInService(email: _email.text, password: _password.text.toLowerCase());
+                      log(user?.id.toString() ?? "error");
+                      if (context.mounted) {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          homePageRoute,
+                          (_) => false,
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: faintDarkBlue,
+                    ),
+                    child: Text("Sign In", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: backgroundBlack),),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account?",
+                      style: TextStyle(color: Color(0xFFBEBEBE)),
+                    ),
+                    SizedBox(width: 5,),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                        ).pushNamedAndRemoveUntil(signUpRoute, (_) => false);
+                      },
+                      child: Text(
+                        "Sign Up!",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Column textWithField({required String text, required TextInputType keyType, required TextEditingController controller}) {
+  Column textWithField({
+    required String text,
+    required TextInputType keyType,
+    required TextEditingController controller,
+  }) {
     return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 10, top: deviceHeight/25, bottom: 8.0),
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      color: blueText,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: 10,
+            top: deviceHeight / 25,
+            bottom: 8.0,
+          ),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: blueText,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+          child: SizedBox(
+            height: 40,
+            child: TextField(
+              keyboardType: keyType,
+              controller: controller,
+              style: TextStyle(color: blueText),
+              textAlignVertical: TextAlignVertical(y: -0.0),
+              decoration: InputDecoration(
+                hintText: 'Enter your email',
+                hintStyle: TextStyle(color: Colors.blueGrey),
+                fillColor: textFieldBlue,
+                filled: true,
+                contentPadding: EdgeInsets.only(
+                  left: 12,
+                  bottom: 0.0,
+                ), // bottom: -25.0, top: 40),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(width: 2.0),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: SizedBox(
-                    height: 40,
-                    child: TextField(
-                      keyboardType: keyType,
-                      controller: controller,
-                      style: TextStyle(color: blueText),
-                      textAlignVertical: TextAlignVertical(y: -0.0),
-                      decoration: InputDecoration(
-                        hintText: 'Enter your email',
-                        hintStyle: TextStyle(color: Colors.blueGrey),
-                        fillColor: textFieldBlue,
-                        filled: true,
-                        contentPadding: EdgeInsets.only(left: 12, bottom: 0.0),// bottom: -25.0, top: 40),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(width: 2.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue),
+                  borderRadius: BorderRadius.circular(30),
                 ),
-              ],
-            );
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

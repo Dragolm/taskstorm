@@ -8,6 +8,7 @@ const brownishPink = Color(0xFF452535);
 const blueText = Color(0xFFB2D9F9);
 const backgroundBlack = Color(0xFF010101);
 const textFieldBlue = Color(0xFF22333C);
+const faintDarkBlue = Color(0xFF5299C0);
 
 //routes
 const signUpRoute = '/signUp';
