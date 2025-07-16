@@ -14,6 +14,7 @@ const faintDarkBlue = Color(0xFF5299C0);
 const signUpRoute = '/signUp';
 const signInRoute = '/signIn';
 const homePageRoute = '/home';
+const taskListRoute = '/taskList';
 
 // First get the FlutterView.
 FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;

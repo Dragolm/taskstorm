@@ -6,6 +6,7 @@ import 'package:taskstorm/constants.dart';
 import 'package:taskstorm/pages/home_page.dart';
 import 'package:taskstorm/pages/sign_in.dart';
 import 'package:taskstorm/pages/sign_up.dart';
+import 'package:taskstorm/pages/task_list.dart';
 //import 'package:taskstorm/constants.dart';
 
 Future<void> main() async {
@@ -33,10 +34,12 @@ class MyApp extends StatelessWidget {
         signUpRoute: (context) => SignUp(),
         signInRoute: (context) => SignIn(),
         homePageRoute: (context) => HomePage(),
+        taskListRoute: (context) => TaskList(),
       },
     );
   }
 }
+
 
 
 class AuthGate extends StatelessWidget {
