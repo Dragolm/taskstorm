@@ -2,7 +2,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:taskstorm/crud_services.dart';
 import 'package:taskstorm/pages/sign_in.dart';
 import 'package:taskstorm/task.dart';
