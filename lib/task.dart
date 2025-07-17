@@ -3,7 +3,7 @@
 class Task{
   int? id;
   String title;
-  String? status;
+  bool status;
 
   Task({
     this.id,
@@ -18,7 +18,7 @@ class Task{
     return Task(
       id: map['id'] as int,
       title: map['title'] as String,
-      status: map['status'] as String
+      status: map['status'] as bool
     );
   }
 

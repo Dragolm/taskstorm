@@ -17,12 +17,12 @@ class CrudServices {
     await database.from('Quests').update({'title': title, 'status': task.status}).eq('id', task.id!);
   }
 
-  // Read
-  // Future readTask() async {
-  //   final data = await database.from('Quests').select();
-  //   log(data.toString());
-  //   return data;
-  // }
+  //Change status
+  Future changeStatus(Task task, bool newState) async {
+    await database.from('Quests').update({'status': newState}).eq('id', task.id!);
+  }
+
+
   final stream = Supabase.instance.client.from('Quests').stream(primaryKey: ['id']).map((data) => data.map((taskMap) => Task.fromMap(taskMap)).toList());
 
   //get total task count

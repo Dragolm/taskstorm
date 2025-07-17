@@ -1,7 +1,10 @@
-// import 'dart:developer';
+// ignore: unused_import
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:taskstorm/crud_services.dart';
+import 'package:taskstorm/pages/sign_in.dart';
 import 'package:taskstorm/task.dart';
 
 class TaskList extends StatefulWidget {
@@ -12,7 +15,6 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-
   @override
   void initState() {
     //dataCount = await tasksDatabase.getCount();
@@ -45,7 +47,7 @@ class _TaskListState extends State<TaskList> {
               //Save button
               TextButton(
                 onPressed: () {
-                  final newTask = Task(title: _title.text, status: 'false');
+                  final newTask = Task(title: _title.text, status: false);
                   tasksDatabase.createTask(newTask);
 
                   //clearing the dialog
@@ -66,21 +68,53 @@ class _TaskListState extends State<TaskList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Task List")),
-      body: StreamBuilder(stream: tasksDatabase.stream, builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(),);
-        }else if(snapshot.hasError) {
-          // log(snapshot.error.toString());
-          return AlertDialog(title: Text(snapshot.error.toString()));
-        }else if(snapshot.hasData) {
-          final tasks = snapshot.data!;
-          return ListView.builder(itemCount: tasks.length, itemBuilder: (context, index) {
-            return ListTile(title: Text(tasks[index].title),);
-          });
-        }else {
-          return Text('NoData ig');
-        }
-      }),
+      body: StreamBuilder(
+        stream: tasksDatabase.stream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // log(snapshot.error.toString());
+            return AlertDialog(title: Text(snapshot.error.toString()));
+          } else if (snapshot.hasData) {
+            final tasks = snapshot.data!;
+            return ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    SizedBox(
+                      width: deviceWidth*7/10,
+                      child: CheckboxListTile(
+                        title: Text(tasks[index].title),
+                        value: tasks[index].status,
+                        onChanged: (newVal) {
+                          //TODO: change a local variable and then update the database slowly to reduce the latency
+                          if(tasks[index].status) {
+                            tasksDatabase.changeStatus(tasks[index], false);
+                          }else{
+                            tasksDatabase.changeStatus(tasks[index], true);
+                          }
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                    ),
+                    IconButton(onPressed: () {
+                      log('message');
+                    }, icon: Icon(Icons.edit)),
+                    IconButton(onPressed: () {
+                      log('message2');
+                    }, icon: Icon(Icons.delete))
+                  ],
+                );
+                // return ListTile(title: Text(tasks[index].title), leading: Icon(Icons.check_box),);
+              },
+            );
+          } else {
+            return Text('NoData ig');
+          }
+        },
+      ),
       // body: FutureBuilder<List<Map<String, dynamic>>>(
       //   future: _future,
       //   builder: (context, snapshot) {
