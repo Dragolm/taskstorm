@@ -61,7 +61,59 @@ class _TaskListState extends State<TaskList> {
   }
 
   //user wants to update note
+  void updateTask(Task task) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text('Edit task:'),
+            actions: [
+              TextField(controller: _title),
+              TextButton(
+                onPressed: () {
+                  _title.clear();
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  tasksDatabase.updateTask(task, _title.text);
+                  _title.clear();
+                  Navigator.pop(context);
+                },
+                child: Text('Update'),
+              ),
+            ],
+          ),
+    );
+  }
+
   //user wants to delete note
+  void deleteTask(Task task) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text('Are you sure you want to delete this?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  tasksDatabase.deleteTask(task);
+                  Navigator.pop(context);
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,27 +135,33 @@ class _TaskListState extends State<TaskList> {
                 return Row(
                   children: [
                     SizedBox(
-                      width: deviceWidth*7/10,
+                      width: deviceWidth * 7 / 10,
                       child: CheckboxListTile(
                         title: Text(tasks[index].title),
                         value: tasks[index].status,
                         onChanged: (newVal) {
                           //TODO: change a local variable and then update the database slowly to reduce the latency
-                          if(tasks[index].status) {
+                          if (tasks[index].status) {
                             tasksDatabase.changeStatus(tasks[index], false);
-                          }else{
+                          } else {
                             tasksDatabase.changeStatus(tasks[index], true);
                           }
                         },
                         controlAffinity: ListTileControlAffinity.leading,
                       ),
                     ),
-                    IconButton(onPressed: () {
-                      log('message');
-                    }, icon: Icon(Icons.edit)),
-                    IconButton(onPressed: () {
-                      log('message2');
-                    }, icon: Icon(Icons.delete))
+                    IconButton(
+                      onPressed: () {
+                        updateTask(tasks[index]);
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        deleteTask(tasks[index]);
+                      },
+                      icon: Icon(Icons.delete),
+                    ),
                   ],
                 );
                 // return ListTile(title: Text(tasks[index].title), leading: Icon(Icons.check_box),);
