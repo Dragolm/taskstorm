@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:taskstorm/crud_services.dart';
@@ -12,23 +12,11 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  dynamic data;
-  int dataCount = 0;
 
   @override
   void initState() {
     //dataCount = await tasksDatabase.getCount();
     super.initState();
-    anAsyncFunc().then((boo) {
-    setState(() {
-      _loading = false;
-    });});
-  }
-
-  anAsyncFunc() async{
-    data = await tasksDatabase.readTask();
-    log(dataCount.toString());
-    log(data.toString());
   }
 
   final tasksDatabase = CrudServices();
@@ -74,21 +62,43 @@ class _TaskListState extends State<TaskList> {
   //user wants to update note
   //user wants to delete note
 
-  bool _loading = true;
-
   @override
   Widget build(BuildContext context) {
-    if (_loading) {return CircularProgressIndicator();}
     return Scaffold(
       appBar: AppBar(title: Text("Task List")),
-      body: ListView.builder(
-        //TODO: try data.length if it works or not
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          List task = data.map((noteMap) => Task.fromMap(noteMap)).toList();
-          log(task.toString());
-          return ListTile(title: Text(data[index].toString()),);
-        }),
+      body: StreamBuilder(stream: tasksDatabase.stream, builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator(),);
+        }else if(snapshot.hasError) {
+          // log(snapshot.error.toString());
+          return AlertDialog(title: Text(snapshot.error.toString()));
+        }else if(snapshot.hasData) {
+          final tasks = snapshot.data!;
+          return ListView.builder(itemCount: tasks.length, itemBuilder: (context, index) {
+            return ListTile(title: Text(tasks[index].title),);
+          });
+        }else {
+          return Text('NoData ig');
+        }
+      }),
+      // body: FutureBuilder<List<Map<String, dynamic>>>(
+      //   future: _future,
+      //   builder: (context, snapshot) {
+      //     if (!snapshot.hasData) {
+      //       return const Center(child: CircularProgressIndicator());
+      //     }
+      //     final countries = snapshot.data!;
+      //     return ListView.builder(
+      //       itemCount: countries.length,
+      //       itemBuilder: ((context, index) {
+      //         final country = countries[index];
+      //         return ListTile(
+      //           title: Text(country['name']),
+      //         );
+      //       }),
+      //     );
+      //   },
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: addTask,
         child: Text('+'),
@@ -97,3 +107,14 @@ class _TaskListState extends State<TaskList> {
     );
   }
 }
+
+
+
+// ListView.builder(
+//         //TODO: try data.length if it works or not
+//         itemCount: data.length,
+//         itemBuilder: (context, index) {
+//           List task = data.map((noteMap) => Task.fromMap(noteMap)).toList();
+//           log(task.toString());
+//           return ListTile(title: Text(data[index].toString()),);
+//         }),

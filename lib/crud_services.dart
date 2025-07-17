@@ -1,6 +1,5 @@
 
 
-import 'dart:developer';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:taskstorm/task.dart';
@@ -19,12 +18,12 @@ class CrudServices {
   }
 
   // Read
-  Future readTask() async {
-    final data = await database.from('Quests').select();
-    log(data.toString());
-    return data;
-  }
-//  final stream = Supabase.instance.client.from('Quests').stream(primaryKey: ['id']).listen((data) => data.map((noteMap) => Task.fromMap(noteMap)).toList());
+  // Future readTask() async {
+  //   final data = await database.from('Quests').select();
+  //   log(data.toString());
+  //   return data;
+  // }
+  final stream = Supabase.instance.client.from('Quests').stream(primaryKey: ['id']).map((data) => data.map((taskMap) => Task.fromMap(taskMap)).toList());
 
   //get total task count
   Future getCount() async {
